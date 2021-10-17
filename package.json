@@ -1,0 +1,48 @@
+{
+  "name": "xiaomi-mijia-lywsd03mmc",
+  "version": "1.0.0",
+  "description": "Search and get data from nearby sensors. Only works with the Xiaomi Mijia Bluetooth temperature and humidity sensor (LYWSD03MMC).",
+  "keywords": [
+    "xiaomi",
+    "mijia",
+    "lywsd03mmc",
+    "bluetooth",
+    "thermometer",
+    "hygrometer",
+    "sensor",
+    "temperature",
+    "humidity",
+    "raspberrypi",
+    "gatttool"
+  ],
+  "homepage": "https://github.com/r-hede/xiaomi-mijia-lywsd03mmc#readme",
+  "bugs": {
+    "url": "https://github.com/r-hede/xiaomi-mijia-lywsd03mmc/issues",
+    "email": "robin.hede@outlook.fr"
+  },
+  "license": "MIT",
+  "author": "Robin Hède <robin.hede@outlook.fr> (https://robin-hede.fr)",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/r-hede/xiaomi-mijia-lywsd03mmc.git"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "standard --env jest && jest --coverage"
+  },
+  "dependencies": {
+    "gatttool": "^1.0.1"
+  },
+  "devDependencies": {
+    "coveralls": "^3.1.1",
+    "jest": "^27.3.0",
+    "standard": "^16.0.4"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "os": [
+    "linux"
+  ]
+}

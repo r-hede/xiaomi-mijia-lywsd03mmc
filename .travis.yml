@@ -1,0 +1,12 @@
+# Set language
+language: node_js
+
+# Set Node.js versions we can work with
+node_js:
+  - 12
+  - 14
+  - 16
+ 
+# After success, get the great coverage reporting of coveralls.io
+after_success:
+  - cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
