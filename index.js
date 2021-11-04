@@ -30,7 +30,7 @@ module.exports = (() => {
         } else {
           // Remove the useless beginning of the string and the last line break
           stdout = stdout.slice(0, -1).substring(12)
-          // Split a string into an array of substrings to browse the results
+          // Split the string into an array of substrings to browse the results
           stdout = stdout.split(' ')
           for (let i = 0; i < stdout.length; i++) {
             if (stdout[i] === 'LYWSD03MMC') sensorsAddresses.push(stdout[i - 1])
@@ -51,7 +51,7 @@ module.exports = (() => {
    *
    * @example
    * // Replace with a valid MAC address of a nearby sensor
-   * var sensorAddress = 'XX:XX:XX:XX:XX:XX'
+   * const sensorAddress = 'XX:XX:XX:XX:XX:XX'
    * getData(sensorAddress).then((res) => {
    *     // {
    *     //     address: 'XX:XX:XX:XX:XX:XX',
@@ -74,16 +74,16 @@ module.exports = (() => {
           // Keep all timers to delete them later
           timeouts.push(setTimeout(() => {
             // Get the temperature, the humidity level and the battery level
-            listenHandle(sensorAddress).then((res) => {
+            _listenHandle(sensorAddress).then((res) => {
               // Delete all existing timers
               for (let j = 0; j < timeouts.length; j++) {
                 clearTimeout(timeouts[j])
               }
               resolve({
                 address: sensorAddress,
-                humidityLevel: getHumidityLevel(res),
-                temperature: getTemperature(res, tempInFahrenheit),
-                batteryLevel: getBatteryLevel(res)
+                humidityLevel: _getHumidityLevel(res),
+                temperature: _getTemperature(res, tempInFahrenheit),
+                batteryLevel: _getBatteryLevel(res)
               })
             }).catch((err) => {
               // No data received within the allocated time
@@ -107,14 +107,14 @@ module.exports = (() => {
    *
    * @example
    * // Replace with a valid MAC address of a nearby sensor
-   * var sensorAddress = 'XX:XX:XX:XX:XX:XX'
+   * const sensorAddress = 'XX:XX:XX:XX:XX:XX'
    * // Set to true if you want the temperature in Fahrenheit
-   * var tempInFahrenheit = false
-   * listenHandle(sensorAddress).then((res) => {
+   * const tempInFahrenheit = false
+   * _listenHandle(sensorAddress).then((res) => {
    *     console.log({
-   *         'humidityLevel': getHumidityLevel(res),
-   *         'temperature': getTemperature(res, tempInFahrenheit),
-   *         'batteryLevel': getBatteryLevel(res)
+   *         'humidityLevel': _getHumidityLevel(res),
+   *         'temperature': _getTemperature(res, tempInFahrenheit),
+   *         'batteryLevel': _getBatteryLevel(res)
    *     })
    * }).catch((err) => {
    *     console.error(err)
@@ -122,7 +122,7 @@ module.exports = (() => {
    *
    * @returns {Promise<string|Buffer>} - Promise with an error (string) or the requested data (Buffer).
    */
-  function listenHandle (sensorAddress) {
+  function _listenHandle (sensorAddress) {
     return new Promise((resolve, reject) => {
       const query = 'timeout 15 gatttool -b ' +
         sensorAddress +
@@ -153,13 +153,13 @@ module.exports = (() => {
    * @param {Buffer} buf - Buffer that contains the humidity level in hexadecimal value.
    *
    * @example
-   * var buf = Buffer.from('460844c00a', 'hex')
-   * var humidityLevel = getHumidityLevel(buf)
+   * const buf = Buffer.from('460844c00a', 'hex')
+   * const humidityLevel = _getHumidityLevel(buf)
    * console.log(humidityLevel) // 68
    *
    * @returns {number} - Humidity level in decimal value.
    */
-  function getHumidityLevel (buf) {
+  function _getHumidityLevel (buf) {
     return buf.readUInt8(2)
   }
 
@@ -172,13 +172,13 @@ module.exports = (() => {
    * @param {undefined} val - Internal variable of the function.
    *
    * @example
-   * var buf = Buffer.from('460844c00a', 'hex')
-   * var temperature = getTemperature(buf)
+   * const buf = Buffer.from('460844c00a', 'hex')
+   * const temperature = _getTemperature(buf)
    * console.log(temperature) // 21.2
    *
    * @returns {number} - Temperature in decimal value.
    */
-  function getTemperature (buf, valueInFahrenheit = false, val) {
+  function _getTemperature (buf, valueInFahrenheit = false, val) {
     if (buf[1] === 255) {
       // Temperature is negative
       val = Number((-65536 + buf.readUInt16LE(0)) / 10)
@@ -196,14 +196,14 @@ module.exports = (() => {
    * @param {Buffer} buf - Buffer that contains the battery level in hexadecimal value.
    *
    * @example
-   * var buf = Buffer.from('460844c00a', 'hex')
-   * var batteryLevel = getBatteryLevel(buf)
+   * const buf = Buffer.from('460844c00a', 'hex')
+   * const batteryLevel = _getBatteryLevel(buf)
    * console.log(batteryLevel) // 72
    *
    * @returns {number} - Battery level in decimal value.
    */
-  function getBatteryLevel (buf) {
-    return Math.round(map(buf.readUInt16LE(3), 2100, 3000, 0, 100))
+  function _getBatteryLevel (buf) {
+    return Math.round(_map(buf.readUInt16LE(3), 2100, 3000, 0, 100))
   }
 
   /**
@@ -216,12 +216,12 @@ module.exports = (() => {
    * @param {number} outMax - Upper bound of the value’s target range.
    *
    * @example
-   * var mappedValue = map(2500, 2100, 3000, 0, 100)
+   * const mappedValue = _map(2500, 2100, 3000, 0, 100)
    * console.log(mappedValue) // 44.4
    *
    * @returns {number} - Mapped value.
    */
-  function map (val, inMin, inMax, outMin, outMax) {
+  function _map (val, inMin, inMax, outMin, outMax) {
     if (val > inMax) {
       return outMax
     } else if (val < inMin) {
@@ -233,6 +233,11 @@ module.exports = (() => {
 
   return {
     getSensors: getSensors,
-    getData: getData
+    getData: getData,
+    _listenHandle: _listenHandle,
+    _getHumidityLevel: _getHumidityLevel,
+    _getTemperature: _getTemperature,
+    _getBatteryLevel: _getBatteryLevel,
+    _map: _map
   }
 })()

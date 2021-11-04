@@ -1,6 +1,6 @@
 {
   "name": "xiaomi-mijia-lywsd03mmc",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Search and get data from nearby sensors. Only works with the Xiaomi Mijia Bluetooth temperature and humidity sensor (LYWSD03MMC).",
   "keywords": [
     "xiaomi",
@@ -35,12 +35,12 @@
     "gatttool": "^1.0.1"
   },
   "devDependencies": {
-    "coveralls": "^3.1.1",
-    "jest": "^27.3.0",
+    "coveralls-next": "^4.0.1",
+    "jest": "^27.3.1",
     "standard": "^16.0.4"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "os": [
     "linux"
